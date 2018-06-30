@@ -10,7 +10,7 @@ It has almost all of the functions that come with amChart Pie.
 
 You can find them here.  [AmPieChart] (https://docs.amcharts.com/3/javascriptcharts/AmPieChart)
 
-This chart will also work with IE as well with Goggle Chrome.
+This chart will also work with IE as well with Google Chrome.
 
 ## Screen shots to come
 
