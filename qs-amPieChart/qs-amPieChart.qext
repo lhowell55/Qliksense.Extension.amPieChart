@@ -1,0 +1,16 @@
+{
+	"name": "QS amPieChart",
+	"description": "Pie Chart",
+	"icon": "pie-chart",
+	"type": "visualization",
+	"version": "1.0.0",
+	"author": "modeled after Niels Lindberg-Poulsen amChart. By Les Howell",
+	"homepage": "",
+	"keywords": "qlik-sense, visualization",
+	"license": "",
+	"repository": "",
+	"style":"pie",
+	"dependencies": {
+		"qlik-sense": ">=3.0.x"
+	}
+}
