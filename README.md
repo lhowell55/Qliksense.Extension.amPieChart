@@ -12,7 +12,9 @@ You can find them here.  [AmPieChart] (https://docs.amcharts.com/3/javascriptcha
 
 This chart will also work with IE as well with Google Chrome.
 
-## Screen shots to come
+## Screen
+
+./piechart/amPieChart.png
 
 ## How to use
 Import qs-amPieChart.zip into your qliksense dev-hub extensions folder.  The folder name is IMPORTANT.  If you need to change it, then you will also need to modify the 'qs-amPieChart.js' code here:  
