@@ -20,8 +20,10 @@ Import qs-amPieChart.zip into your qliksense dev-hub extensions folder.  The fol
 First few lines in the js file.
 
 //Extension folder (change if you rename the extension folder)
+
 var folder = 'qs-amPieChart';
- ****8
+
+****
  
 ## Disclaimer
 I am not affiliated with amcharts.com. Their library is free to use for commercial purposes with the caveate that you must include the link to their website in the charts (as seen on the top left of the chart screenshots). If you would want a version without links to amcharts.com they would have to implement a solution to market.qlik.
