@@ -4,7 +4,7 @@ Qliksense extension for amPieChart by amChart
 ## Introduction
 While searching for some good charts, I found great charts @ [amCharts](https://www.amcharts.com/).  You can use them for FREE with a watermark, but for a small purchase, the watermark can be removed legally.  
 
-I found a amComboChart created by NielsLindberg.  https://github.com/NielsLindberg  A lot of framework was created and I just needed to extend some of the functions to create the amPieChart. So, I give credit to NielsLindberg for his intial work.
+I found a Qliksense extension called amComboChart created by NielsLindberg.  https://github.com/NielsLindberg  A lot of framework was created and I just needed to extend some of the functions to create the amPieChart. So, I give credit to NielsLindberg for his intial work.
 
 It has almost all of the functions that come with amChart Pie.  
 
