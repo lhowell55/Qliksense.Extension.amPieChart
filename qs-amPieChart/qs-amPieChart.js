@@ -218,10 +218,6 @@ function(qlik, $, props,numeral) {
             "outlineThickness":(layout.amChart.outlineThickness == undefined ? 0 : layout.amChart.outlineThickness),
             "labelTickColor": (layout.amChart.labelTickColor == undefined ? "#000000" : layout.amChart.labelTickColor),
             "labelTickAlpha":(layout.amChart.labelTickAlpha == undefined ? 1 : layout.amChart.labelTickAlpha),
-
-            "labelFunction":function( item ) {
-                return  numeral(item.value).format(item.dataContext['format'+hc.qMeasureInfo[0].cId]) ;
-            }
           } );
           
           //Handel THEMES
