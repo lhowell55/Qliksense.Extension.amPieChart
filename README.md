@@ -28,4 +28,4 @@ var folder = 'qs-amPieChart';
 ****
  
 ## Disclaimer
-I am not affiliated with amcharts.com. Their library is free to use for commercial purposes with the caveate that you must include the link to their website in the charts (as seen on the top left of the chart screenshots). If you would want a version without links to amcharts.com they would have to implement a solution to market.qlik.
+I am not affiliated with amcharts.com. Their library is free to use for commercial purposes with the caveate that you must include the link to their website in the charts (as seen on the top left of the chart screenshots). If you would want a version without links to amcharts.com you would need to purchase a license from amCharts.com.
