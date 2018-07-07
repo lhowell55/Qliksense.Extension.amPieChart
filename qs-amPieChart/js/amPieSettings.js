@@ -2,33 +2,11 @@ define([
 ], function() {
     'use strict';
 
-    var license = {
-        type: "items",
-        label: "* LICENSE REQUIRED *",
-        show: function(data) {
-            return (data.amChart.hideCredits == true)
-        }
-    };
-
     //Appearance
     var appearance = {
         type: "items",
         label: "Appearance",
         items: {
-            hideCredits: {
-                type: "boolean",
-                component: "switch",
-                label: "Remove Credit Branding",
-                ref: "amChart.hideCredits",
-                options: [{
-                    value: true,
-                    label: "On"
-                }, {
-                    value: false,
-                    label: "Off"
-                }],
-                defaultValue: false
-            },
             interactionQlik: {
                 type: "boolean",
                 component: "switch",
@@ -399,7 +377,6 @@ define([
         label: "Chart Settings",
         component: "expandable-items",
         items: {
-            license:license,
             appearance: appearance,
             animation:animation,
         }
