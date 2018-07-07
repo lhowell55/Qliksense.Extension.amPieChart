@@ -16,6 +16,20 @@ This chart will also work with IE as well with Google Chrome.
 
 ![AmPieChart](piechart/amPieChart.png)
 
+## Installation Procedures
+
+Download "Qliksense.Extension.amPieChart-master.zip" file.  
+
+## Installing Extension into Qlik Sense Desktop
+Locate .zip file with extension and unzip it. Open the unzipped folder to find another folder "qs-amPieChart" inside. Copy that folder and navigate to documents/qlik/sense/extensions and paste the folder there.  Keey the folder name the same.
+
+# Installing Extension into Qlik Sense Server
+Go to your QMC and, in the navigation menu on the left, under “Manage Resources”, click “Extensions”.
+
+Then, in the action bar at the bottom of the screen, click “Import”
+
+Click “Choose File” in the popup and navigate to the folder, "Qliksense.Extension.amPieChart-master.zip" that was downloaded, select it, then click “Import”.
+
 ## How to use
 Import qs-amPieChart.zip into your qliksense dev-hub extensions folder.  The folder name is IMPORTANT.  If you need to change it, then you will also need to modify the 'qs-amPieChart.js' code here:  
 
