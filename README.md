@@ -23,7 +23,7 @@ Download "Qliksense.Extension.amPieChart-master.zip" file.
 ## Installing Extension into Qlik Sense Desktop
 Locate .zip file with extension and unzip it. Open the unzipped folder to find another folder "qs-amPieChart" inside. Copy that folder and navigate to documents/qlik/sense/extensions and paste the folder there.  Keey the folder name the same.
 
-# Installing Extension into Qlik Sense Server
+## Installing Extension into Qlik Sense Server
 Go to your QMC and, in the navigation menu on the left, under “Manage Resources”, click “Extensions”.
 
 Then, in the action bar at the bottom of the screen, click “Import”
