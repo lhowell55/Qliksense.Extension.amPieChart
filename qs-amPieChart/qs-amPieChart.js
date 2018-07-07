@@ -58,8 +58,6 @@ function(qlik, $, props,numeral) {
 
           pieData.addData();
 
-          // dataProvider.addGraphs();
-
           //Set themes
           AmCharts.themes.dark = amChartsThemesDark;
           AmCharts.themes.light = amChartsThemesLight;
@@ -96,7 +94,13 @@ function(qlik, $, props,numeral) {
           for (i = 0; i < allLabels.length; i++) { 
             allLabels[i].x = layout.amChart.allLabels[i].x+'%';
             allLabels[i].y = layout.amChart.allLabels[i].y+'%';
-          }
+
+            if (allLabels[i].rotation != undefined) {
+                if (allLabels[i].reverseRotation != undefined && allLabels[i].reverseRotation == true) {
+                if (allLabels[i].rotation != 0) allLabels[i].rotation = allLabels[i].rotation * -1;
+              };
+            };
+          };
 
           AmCharts.addInitHandler(function(chart){
   
@@ -110,7 +114,6 @@ function(qlik, $, props,numeral) {
           });
           
           var chart = AmCharts.makeChart(null, {
-            "hideCredits": (layout.amChart.hideCredits == undefined ? false : layout.amChart.hideCredits),
             "type": "pie",
             "theme": layout.amChart.theme,
             "balloonText": layout.amChart.balloon.text,
@@ -167,6 +170,7 @@ function(qlik, $, props,numeral) {
               "equalWidths": (layout.amChart.legend.equalWidths == undefined ? true : layout.amChart.legend.equalWidths),
               "labelText": (layout.amChart.legend.labelText == undefined ? "[[title]]" : layout.amChart.legend.labelText),
               "labelWidth": (layout.amChart.legend.labelWidth == undefined ? 100 : layout.amChart.legend.labelWidth),
+              "useGraphSettings":(layout.amChart.legend.useGraphSettings == undefined ? true : layout.amChart.legend.useGraphSettings),
               "valueAlign": (layout.amChart.legend.valueAlign == undefined ? "right" : layout.amChart.legend.valueAlign),
               "valueText": (layout.amChart.legend.valueText == undefined ? "[[value]]" : layout.amChart.legend.valueText),
               "valueWidth": (layout.amChart.legend.valueWidth == undefined ? 100 : layout.amChart.legend.valueWidth),
@@ -199,7 +203,6 @@ function(qlik, $, props,numeral) {
               "color": (layout.amChart.balloon.color == undefined ? "#000000" : layout.amChart.balloon.color),
               "cornerRadius": (layout.amChart.balloon.cornerRadius == undefined ? 0 : layout.amChart.balloon.cornerRadius),
               "drop": (layout.amChart.balloon.drop == undefined ? false : layout.amChart.balloon.drop),
-              "fadeOutDuration": (layout.amChart.balloon.fadeOutDuration == undefined ? 0 : layout.amChart.balloon.fadeOutDuration),
               "fillAlpha": (layout.amChart.balloon.fillAlpha == undefined ? 1 : layout.amChart.balloon.fillAlpha),
               "fillColor": (layout.amChart.balloon.fillColor == undefined ? "#FFFFFF" : layout.amChart.balloon.fillColor),
               "fixedPosition": (layout.amChart.balloon.fixedPosition == undefined ? true : layout.amChart.balloon.fixedPosition),
@@ -220,6 +223,7 @@ function(qlik, $, props,numeral) {
             "labelTickAlpha":(layout.amChart.labelTickAlpha == undefined ? 1 : layout.amChart.labelTickAlpha),
           } );
           
+
           //Handel THEMES
           if(layout.amChart.theme != "none") {
             chart.color = chart.theme.AmChart.color;
@@ -265,13 +269,17 @@ function(qlik, $, props,numeral) {
             $element.find("*").css("font-family", layout.amChart.labelFontFamily);
           }
 
-          if (layout.amChart.theme == 'dark' || layout.amChart.theme == 'chalk') {
-            $element.css("background-color", "#282828");
-          } else {
-            if (layout.amChart.theme == 'black') {
-              $element.css("background-color", "#222222");
+          if (layout.amChart.theme == 'dark'){
+            $element.css("background-color", "#3F3F3F");
             } else {
-              $element.css("background-color", "#FFFFFF");
+              if(layout.amChart.theme == 'chalk') {
+                $element.css("background-color", "#282828");
+              } else {
+                if (layout.amChart.theme == 'black') {
+                  $element.css("background-color", "#222222");
+                } else {
+                  $element.css("background-color", "#FFFFFF");
+              }
             }
           }
   
