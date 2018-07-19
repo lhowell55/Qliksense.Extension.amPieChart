@@ -28,6 +28,15 @@ define([
         uses: "settings",
     };
 
+    var amSettingsBackground = {
+        type: "items",
+        label: "amChart Settings",
+        items: {
+            amPieSettings: amPieSettings,
+            amChartBackground: amChartBackground,
+        }
+    };
+
     return {
         type: "items",
         component: "accordion",
@@ -36,14 +45,12 @@ define([
             measures: measures,
             sorting: sorting,
             settings: settings,
-            amPieSettings: amPieSettings,
-            amChartBackground: amChartBackground,
+            amSettingsBackground: amSettingsBackground,
             amPieLabels:amPieLabels,
             amChartLegend:amChartLegend,
             amChartBalloon:amChartBalloon,
-            amChartFreeLabels:amChartFreeLabels,
             amChartTitles:amChartTitles,
-
+            amChartFreeLabels:amChartFreeLabels,
         }
     };
 });
