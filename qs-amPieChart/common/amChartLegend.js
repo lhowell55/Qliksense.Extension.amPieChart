@@ -2,15 +2,18 @@ define([
 ], function() {
     'use strict';
 
-    //Activate
-    var activate = {
+    var labelTextHelp = "Label text.\nThe text which will be displayed in the legend.\nTag [[title]] will be replaced with the title of the graph.\nYou can prefix text data as wll\n//example: Suff [[title]] here";
+    var valueTextHelp = "Value text.\nThe text which will be displayed in the value portion of the legend.\nYou can use tags like:[[value]],[[percents]]\nexample: [[percents]]%";
+
+    //Settings
+    var settings = {
         type: "items",
-        label: "Activate",
+        label: "Settings",
         items: {
-            enabled: {
+            legendEnabled: {
                 type: "boolean",
                 component: "switch",
-                label: "Legend enabled",
+                label: "Show Chart Legend",
                 ref: "amChart.legend.enabled",
                 options: [{
                     value: true,
@@ -19,162 +22,12 @@ define([
                     value: false,
                     label: "Off"
                 }],
-                defaultValue: true,
+                defaultValue: false,
             },
-        }
-    };
-
-    //Settings
-    var settings = {
-        type: "items",
-        label: "General Settings",
-        show: function(data) {
-            return (data.amChart.legend.enabled != false)
-        },        
-        items: {
-            equalWidths: {
-                type: "boolean",
-                component: "switch",
-                label: "Equal widths",
-                ref: "amChart.legend.equalWidths",
-                options: [{
-                    value: true,
-                    label: "On"
-                }, {
-                    value: false,
-                    label: "Off"
-                }],
-                defaultValue: true,
-            },
-            labelText: {
-                type: "string",
-                label: "Label text",
-                component: "dropdown",
-                ref: "amChart.legend.labelText",
-                defaultValue: "[[title]]",
-                options: [{
-                        value: "[[title]]",
-                        label: "[[title]]"
-                    }, {
-                        value: "C",
-                        label: "Custom"
-                    },
-                ],  
-            },
-            labelTextCustom: {
-                type: "string",
-                label: "Label custom text",
-                expression: "optional",
-                ref: "amChart.legend.labelTextCustom",
-                defaultValue: "[[title]]",
-                show: function(data) {
-                    return (data.amChart.legend.labelText =='C')
-                }        
-            },
-            labelWidth: {
-                type: "number",
-                label: "Label width",
-                ref: "amChart.legend.labelWidth",
-                defaultValue: 100,
-            },
-            valueText: {
-                type: "string",
-                label: "Value text",
-                component: "dropdown",
-                ref: "amChart.legend.valueText",
-                defaultValue: "[[value]]",
-                options: [{
-                        value: "[[value]]",
-                        label: "[[value]]"
-                    }, {
-                        value: "C",
-                        label: "Custom"
-                    },
-                ],  
-            },
-            valueTextCustom: {
-                type: "string",
-                label: "Value custom text",
-                expression: "optional",
-                ref: "amChart.legend.valueTextCustom",
-                defaultValue: "[[value]]",
-                show: function(data) {
-                    return (data.amChart.legend.enabled != false && data.amChart.legend.valueText =='C')
-                }        
-            },
-            valueWidth: {
-                type: "number",
-                label: "Value width",
-                ref: "amChart.legend.valueWidth",
-                defaultValue: 50,
-            },
-            valueAlign: {
+            legendPosition: {
                 type: "string",
                 component: "dropdown",
-                label: "Value Align",
-                ref: "amChart.legend.valueAlign",
-                options: [{
-                    value: "left",
-                    label: "left"
-                }, {
-                    value: "right",
-                    label: "right"
-                }],
-                defaultValue: "right",
-            },
-            maxColumns: {
-                type: "number",
-                label: "Max columns (0=no max)",
-                ref: "amChart.legend.maxColumns",
-                defaultValue: 0,
-            },
-            reversedOrder: {
-                type: "boolean",
-                component: "switch",
-                label: "Reversed Order",
-                ref: "amChart.legend.reversedOrder",
-                options: [{
-                    value: true,
-                    label: "On"
-                }, {
-                    value: false,
-                    label: "Off"
-                }],
-                defaultValue: true,
-            },
-        }
-    };
-
-    //Position and Margins
-    var margins = {
-        type: "items",
-        label: "Position & Margins",
-        show: function(data) {
-            return (data.amChart.legend.enabled != false)
-        },        
-        items: {
-            align: {
-                type: "string",
-                component: "dropdown",
-                label: "Align",
-                ref: "amChart.legend.align",
-                options: [{
-                    value: "left",
-                    label: "left"
-                }, {
-                    value: "center",
-                    label: "center"
-                },
-                {
-                    value: "right",
-                    label: "right"
-                }],
-                defaultValue: "center",
-            },
-            position: {
-                type: "string",
-                component: "dropdown",
-                label: "Position",
+                label: "Legend Position",
                 ref: "amChart.legend.position",
                 options: [{
                     value: "bottom",
@@ -191,92 +44,346 @@ define([
                     label: "right"
                 }],
                 defaultValue: "bottom",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            verticalGap: {
+            legendAlign: {
+                type: "string",
+                component: "dropdown",
+                label: "Legend Align",
+                ref: "amChart.legend.align",
+                options: [{
+                    value: "left",
+                    label: "left"
+                }, {
+                    value: "center",
+                    label: "center"
+                },
+                {
+                    value: "right",
+                    label: "right"
+                }],
+                defaultValue: "center",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendReversedOrder: {
+                type: "boolean",
+                component: "switch",
+                label: "Reversed Legend Order",
+                ref: "amChart.legend.reversedOrder",
+                options: [{
+                    value: true,
+                    label: "On"
+                }, {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: false,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendMaxColumns: {
                 type: "number",
-                label: "Vertical gap",
-                ref: "amChart.legend.verticalGap",
+                label: "Maximun # of Columns",
+                ref: "amChart.legend.maxColumns",
+                component: "slider",
+                min: 1,
+                max: 20,
+                step: 0.01,
                 defaultValue: 10,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            horizontalGap: {
+            legendEqualWidths: {
+                type: "boolean",
+                component: "switch",
+                label: "Legend Label Equal Widths",
+                ref: "amChart.legend.equalWidths",
+                options: [{
+                    value: true,
+                    label: "On"
+                }, {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: false,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendFontSize: {
+                ref: "amChart.legend.fontSize",
+                label: "Legend Font Size",
                 type: "number",
-                label: "Horizontal gap",
-                ref: "amChart.legend.horizontalGap",
-                defaultValue: 0,
+                expression: "optional",
+                defaultValue: 11,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-        }
-    };
-
-    //Appearances
-    var appearance = {
-        type: "items",
-        label: "Appearance",
-        show: function(data) {
-            return (data.amChart.legend.enabled != false)
-        },        
-        items: {
-            backgroundAlpha: {
+            legendLabelTextPick: {
+                type: "string",
+                component: "buttongroup",
+                label: "Legend Label Text",
+                ref: "amChart.legend.labelTextPick",
+                options: [{
+                    value: "d",
+                    label: "Default",
+                    tooltip: "Default text"
+                }, {
+                    value: ".c.",
+                    label: "Custom",
+                    tooltip: labelTextHelp,
+                }],
+                defaultValue: "d",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendLabelTextCustom: {
+                type: "string",
+                label: "Legend Label Custom Text",
+                ref: "amChart.legend.labelTextCustom",
+                defaultValue: "[[title]]",
+                show: function(data) {
+                    return (data.amChart.legend.labelTextPick =='.c.')
+                }        
+            },
+            legendColorText: {
+                type: "string",
+                label: "Legend Label Color",
+                ref: "amChart.legend.color",
+                expression: "optional",
+                defaultValue: "#000000",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },
+            },
+            legendLabelWidth: {
+                type: "number",
+                label: "Legend Label Width",
+                ref: "amChart.legend.labelWidth",
+                component: "slider",
+                min: 50,
+                max: 350,
+                step: 0.01,
+                defaultValue: 100,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendValueEnabled: {
+                type: "boolean",
+                component: "switch",
+                label: "Show Legend Value Text",
+                ref: "amChart.legend.showValueText",
+                options: [{
+                    value: true,
+                    label: "On"
+                }, {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: false,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendValueText: {
+                type: "string",
+                component: "buttongroup",
+                label: "Legend Value Text",
+                ref: "amChart.legend.valueTextPick",
+                options: [{
+                    value: "d",
+                    label: "Default",
+                    tooltip: "Default text"
+                }, {
+                    value: ".c.",
+                    label: "Custom",
+                    tooltip: valueTextHelp,
+                }],
+                defaultValue: "d",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false && data.amChart.legend.showValueText != false)
+                }        
+            },
+            legendValueTextCustom: {
+                type: "string",
+                label: "Legend Value Custom Text",
+                expression: "optional",
+                ref: "amChart.legend.valueTextCustom",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false && data.amChart.legend.showValueText != false && data.amChart.legend.valueTextPick =='.c.')
+                }        
+            },
+            legendValueWidth: {
+                type: "number",
+                label: "Legend Value Width",
+                ref: "amChart.legend.valueWidth",
+                component: "slider",
+                min: 50,
+                max: 350,
+                step: 0.01,
+                defaultValue: 50,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false && data.amChart.legend.showValueText != false)
+                }        
+            },
+            legendValueAlign: {
+                type: "string",
+                component: "dropdown",
+                label: "Legend Value Align",
+                ref: "amChart.legend.valueAlign",
+                options: [{
+                    value: "left",
+                    label: "left"
+                }, {
+                    value: "right",
+                    label: "right"
+                }],
+                defaultValue: "right",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false && data.amChart.legend.showValueText != false)
+                }        
+            },
+            legendSpacing: {
+                type: "number",
+                label: "Space betwen Legends",
+                ref: "amChart.legend.spacing",
+                component: "slider",
+                min: 0,
+                max: 75,
+                step: 0.01,
+                defaultValue: 20,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendVerticalGap: {
+                type: "number",
+                label: "Legend Vertical Gap",
+                ref: "amChart.legend.verticalGap",
+                component: "slider",
+                min: 0,
+                max: 75,
+                step: 0.01,
+                defaultValue: 10,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendHorizontalGap: {
+                type: "number",
+                label: "Legend Horizontal Gap",
+                ref: "amChart.legend.horizontalGap",
+                component: "slider",
+                min: 0,
+                max: 150,
+                step: 0.01,
+                defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendAdjustWidth: {
+                type: "boolean",
+                component: "switch",
+                label: "Auto Adjust Legend Width",
+                ref: "amChart.legend.legendAdjustWidth",
+                options: [{
+                    value: true,
+                    label: "Yes"
+                }, {
+                    value: false,
+                    label: "No"
+                }],
+                defaultValue: true,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendWidth: {
+                type: "number",
+                label: "Legend Width",
+                ref: "amChart.legend.width",
+                component: "slider",
+                min: 10,
+                max: 1200,
+                step: 0.01,
+                defaultValue: 300,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false && data.amChart.legend.legendAdjustWidth == false)
+                },        
+            },
+            legendBackgroundColorText: {
+                type: "string",
+                label: "Legend Background Color",
+                ref: "amChart.legend.backgroundColor",
+                expression: "optional",
+                defaultValue: "#FFFFFF",
+                show: function(data) {
+                    return (data.amChart.legend.enabled  != false)
+                },
+            },
+            legendBackgroundAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Background alpha",
+                label: "Legend Background Opacity",
                 ref: "amChart.legend.backgroundAlpha",
                 min: 0,
                 max: 1,
-                step: 0.1,
+                step: 0.01,
                 defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            backgroundColor: {
+            legendBorderColorText: {
                 type: "string",
-                label: "Background color",
+                label: "Legend Border Color",
+                ref: "amChart.legend.borderColor",
                 expression: "optional",
-                ref: "amChart.legend.backgroundColor",
                 defaultValue: "#FFFFFF",
+                show: function(data) {
+                    return (data.amChart.legend.enabled  != false)
+                },
             },
-            borderAlpha: {
+            legendBorderAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Border alpha",
+                label: "Legend Border Opacity",
                 ref: "amChart.legend.borderAlpha",
                 min: 0,
                 max: 1,
-                step: 0.1,
+                step: 0.01,
                 defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            borderColor: {
-                type: "string",
-                label: "Border color",
-                expression: "optional",
-                ref: "amChart.legend.borderColor",
-                defaultValue: "#000000",
-            },
-            color: {
-                type: "string",
-                label: "Text color",
-                expression: "optional",
-                ref: "amChart.legend.color",
-                defaultValue: "#000000",
-            },
-            fontSize: {
-                ref: "amChart.legend.fontSize",
-                label: "Font Size",
+            legendMarkerSize: {
                 type: "number",
-                defaultValue: 11,
+                label: "Marker Size",
+                ref: "amChart.legend.markerSize",
+                component: "slider",
+                min: 0,
+                max: 50,
+                step: 0.01,
+                defaultValue: 16,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-        }
-    };
-
-    //Marker
-    var markers = {
-        type: "items",
-        label: "Markers",
-        show: function(data) {
-            return (data.amChart.legend.enabled != false)
-        },        
-        items: {
-            markerType: {
+            legendMarkerType: {
                 type: "string",
                 component: "dropdown",
-                label: "Marker type",
+                label: "Marker Type",
                 ref: "amChart.legend.markerType",
                 options: [{
                     value: "circle",
@@ -310,46 +417,63 @@ define([
                     label: "line"
                 }],
                 defaultValue: "circle",
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            markerBorderAlpha: {
+            legendMarkerBorderColorText: {
+                type: "string",
+                label: "Marker Border Color",
+                ref: "amChart.legend.markerBorderColor",
+                expression: "optional",
+                defaultValue: "#FFFFFF",
+                show: function(data) {
+                    return (data.amChart.legend.enabled  != false)
+                },
+            },
+            legendMarkerBorderAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Marker border alpha",
+                label: "Marker Border Opacity",
                 ref: "amChart.legend.markerBorderAlpha",
                 min: 0,
                 max: 1,
-                step: 0.1,
+                step: 0.01,
                 defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            markerBorderThickness: {
+            legendMarkerBorderThickness: {
                 type: "number",
-                label: "Marker border thickness",
+                label: "Marker Border Thickness",
                 ref: "amChart.legend.markerBorderThickness",
+                component: "slider",
+                min: 0,
+                max: 20,
+                step: 0.01,
                 defaultValue: 1,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            markerBorderColor: {
-                type: "string",
-                label: "Marker border color",
-                expression: "optional",
-                ref: "amChart.legend.markerBorderColor",
-                defaultValue: "#000000",
-            },
-            markerLabelGap: {
+            legendMarkerLabelGap: {
                 type: "number",
-                label: "Marker label gap",
+                label: "Label Gap",
                 ref: "amChart.legend.markerLabelGap",
-                defaultValue: 1,
+                component: "slider",
+                min: 0,
+                max: 20,
+                step: 0.01,
+                defaultValue: 5,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            markerSize: {
-                type: "number",
-                label: "Marker size",
-                ref: "amChart.legend.markerSize",
-                defaultValue: 16,
-            },
-            useMarkerColorForLabels: {
+            legendUseMarkerColorForLabels: {
                 type: "boolean",
                 component: "switch",
-                label: "Use marker color for labels",
+                label: "Use Marker Color for Labels",
                 ref: "amChart.legend.useMarkerColorForLabels",
                 options: [{
                     value: true,
@@ -359,11 +483,14 @@ define([
                     label: "Off"
                 }],
                 defaultValue: false,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-            useMarkerColorForValue: {
+            legendUseMarkerColorForValue: {
                 type: "boolean",
                 component: "switch",
-                label: "Use marker color for values",
+                label: "Use Marker Color for Values",
                 ref: "amChart.legend.useMarkerColorForValues",
                 options: [{
                     value: true,
@@ -373,19 +500,88 @@ define([
                     label: "Off"
                 }],
                 defaultValue: false,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
             },
-        }
+            legendAutoMargins: {
+                type: "boolean",
+                component: "switch",
+                label: "Use Legend Auto Margins",
+                ref: "amChart.legend.autoMargins",
+                options: [{
+                    value: true,
+                    label: "On"
+                },
+                {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: true,
+                show: function(data) {
+                    return (data.amChart.legend.enabled != false)
+                },        
+            },
+            legendMarginTop: {
+                type: "number",
+                label: "Legend Margin Top",
+                ref: "amChart.legend.marginTop",
+                component: "slider",
+                min: 0,
+                max: 200,
+                step: 0.01,
+                defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.legend.autoMargins != undefined && data.amChart.legend.autoMargins != true)
+                },
+            },
+            legendMarginBottom: {
+                type: "number",
+                label: "Legend Margin Bottom",
+                ref: "amChart.legend.marginBottom",
+                component: "slider",
+                min: 0,
+                max: 200,
+                step: 0.01,
+                defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.legend.autoMargins != undefined && data.amChart.legend.autoMargins != true)
+                },
+            },
+            legendMarginLeft: {
+                type: "number",
+                label: "Legend Margin Left",
+                ref: "amChart.legend.marginLeft",
+                component: "slider",
+                min: 0,
+                max: 800,
+                step: 0.01,
+                defaultValue: 20,
+                show: function(data) {
+                    return (data.amChart.legend.autoMargins != undefined && data.amChart.legend.autoMargins != true)
+                },
+            },
+            legendMarginRight: {
+                type: "number",
+                label: "Legend Margin Right",
+                ref: "amChart.legend.marginRight",
+                component: "slider",
+                min: 0,
+                max: 800,
+                step: 0.01,
+                defaultValue: 20,
+                show: function(data) {
+                    return (data.amChart.legend.autoMargins != undefined && data.amChart.legend.autoMargins != true)
+                },
+            },
+        },
     };
 
     return {
-        label: "Chart Legend",
-        component: "expandable-items",
+        label: "amChart Legend",
+        type: "items",
         items: {
-            activate:activate,
             settings: settings,
-            margins: margins,
-            appearance: appearance,
-            markers: markers,
         }
     };
 });

@@ -5,44 +5,55 @@ define([
     //Margins
     var margins = {
         type: "items",
-        label: "Margins",
+        label: "Chart Margins",
         items: {
             marginBottom: {
                 type: "number",
                 label: "Margin bottom",
                 ref: "amChart.marginBottom",
+                component: "slider",
+                min: 0,
+                max: 200,
+                step: 0.01,
                 defaultValue: 10
             },
             marginLeft: {
                 type: "number",
                 label: "Margin left",
                 ref: "amChart.marginLeft",
+                component: "slider",
+                min: 0,
+                max: 200,
+                step: 0.01,
                 defaultValue: 0
             },
             marginRight: {
                 type: "number",
                 label: "Margin right",
                 ref: "amChart.marginRight",
+                component: "slider",
+                min: 0,
+                max: 200,
+                step: 0.01,
                 defaultValue: 0
             },
             marginTop: {
                 type: "number",
                 label: "Margin top",
                 ref: "amChart.marginTop",
+                component: "slider",
+                min: 0,
+                max: 200,
+                step: 0.01,
                 defaultValue: 10
             },
         }
     };
 
-    //Reserved for Plot area
-//    show: function(data) {
-//        return (data.extensionMeta.style != "pie")
-//    },        
-
     //Background
     var background = {
         type: "items",
-        label: "Background",
+        label: "Chart Background",
         items: {
             backgroundAlpha: {
                 type: "number",
@@ -85,7 +96,7 @@ define([
     };
 
     return {
-        label: "Chart Background & plot area",
+        label: "Chart Background",
         component: "expandable-items",
         items: {
             margins: margins,

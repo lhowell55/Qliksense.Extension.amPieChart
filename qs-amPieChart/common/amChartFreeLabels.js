@@ -14,24 +14,51 @@ define([
             text: {
                 type: "string",
                 label:"Text",
-                label: "text",
                 expression: "optional",
                 ref: "text",
+                defaultValue: "Free Label",
             },
             alpha: {
                 type: "number",
                 component: "slider",
-                label: "Alpha",
+                label: "Label Opacity",
                 ref: "alpha",
                 min: 0,
                 max: 1,
-                step: 0.1,
+                step: 0.01,
                 defaultValue: 1
             },
-            bold:  {
+            rotation: {
+                type: "number",
+                component: "slider",
+                label: "Label Rotation",
+                ref: "rotation",
+                min: 0,
+                max: 90,
+                step: 0.02,
+                defaultValue: 0,
+              },
+              reverseRotation: {
                 type: "boolean",
                 component: "switch",
-                label: "Bold",
+                label: "Reverse Label Rotation",
+                ref: "reverseRotation",
+                options: [{
+                    value: true,
+                    label: "Yes"
+                }, {
+                    value: false,
+                    label: "No"
+                }],
+                defaultValue: false,
+                show: function(data) {
+                  return (data.rotation != 0)
+                }   
+              },     
+              bold:  {
+                type: "boolean",
+                component: "switch",
+                label: "Label Bold",
                 ref: "bold",
                 options: [{
                     value: true,
@@ -44,14 +71,14 @@ define([
             },
             size : {
                 type:"number", 
-                label:"Size", 
+                label:"Label Size", 
                 expression: "optional",
                 defaultValue: 12,
                 ref:"size", 
             },
             color: {
                 type:"string", 
-                label: "Color",
+                label: "Label Color",
                 expression: "optional",
                 ref: "color",
                 defaultValue: "#000000",
@@ -59,7 +86,7 @@ define([
             align: {
                 type: "string",
                 component: "dropdown",
-                label: "Align",
+                label: "Label Align",
                 ref: "align",
                 options: [{
                     value: "left",
@@ -77,28 +104,28 @@ define([
             X: {
                 type: "number",
                 component: "slider",
-                label: "X axis (%)",
+                label: "Position X axis (%)",
                 ref: "x",
                 min: 0,
                 max: 100,
-                step: 1,
+                step: 0.01,
                 defaultValue: 0
             },
             Y: {
                 type: "number",
                 component: "slider",
-                label: "Y axis (%)",
+                label: "Posistion Y axis (%)",
                 ref: "y",
                 min: 0,
                 max: 100,
-                step: 1,
+                step: 0.01,
                 defaultValue: 0
             },
         }
     };
 
     return {
-        label: "Chart Free Labels",
+        label: "amChart Free Labels",
         component: "items",
         items: {
             allLabels:allLabels,

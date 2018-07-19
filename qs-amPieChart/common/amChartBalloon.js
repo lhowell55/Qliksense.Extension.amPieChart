@@ -1,15 +1,17 @@
 define([], function() {
     'use strict';
 
+    var balloonHelp = "Balloon text.\nThe following tags can be used: \n[[value]], [[title]], [[percents]]\nHTML tags like <span style> can also be used.\nexample: [[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>";
+
     //Activate
-    var activate = {
+    var settings = {
         type: "items",
-        label: "Activate",
+        label: "Balloon Settings",
         items: {
-            enabled: {
+            balloonEnabled: {
                 type: "boolean",
                 component: "switch",
-                label: "Balloon enabed",
+                label: "Show Balloon",
                 ref: "amChart.balloon.enabled",
                 options: [{
                     value: true,
@@ -21,166 +23,10 @@ define([], function() {
                 }],
                 defaultValue: true,
             },
-        }
-    };
-
-    //Settings
-    var settings = {
-        type: "items",
-        label: "General Settings",
-        show: function(data) {
-            return (data.amChart.balloon.enabled != false)
-        },
-        items: {
-            text: {
-                type: "string",
-                label: "Value text",
-                component: "dropdown",
-                ref: "amChart.balloon.text",
-                defaultValue: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-                options: [{
-                        value: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-                        label: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>"
-                    }, {
-                        value: "C",
-                        label: "Custom"
-                    },
-                ],  
-            },
-            textCustom: {
-                type: "string",
-                label: "Value custom text",
-                expression: "optional",
-                ref: "amChart.balloon.textCustom",
-                defaultValue: "[[title]]<br><span style='font-size:14px'><b>[[value]]</b> ([[percents]]%)</span>",
-                show: function(data) {
-                    return (data.amChart.balloon.text =='C')
-                }        
-            },
-            adjustBorderColor: {
+            balloonDrop: {
                 type: "boolean",
                 component: "switch",
-                label: "Adjust border color",
-                ref: "amChart.balloon.adjustBorderColor",
-                options: [{
-                    value: true,
-                    label: "On"
-                },
-                {
-                    value: false,
-                    label: "Off"
-                }],
-                defaultValue: true,
-            },
-            animationDuration: {
-                type: "number",
-                component: "slider",
-                label: "Animation duration",
-                ref: "amChart.balloon.animationDuration",
-                min: 0,
-                max: 2,
-                step: 0.01,
-                defaultValue: 0,
-            },
-            fadeOutDuration: {
-                type: "number",
-                component: "slider",
-                label: "Fade out duration",
-                ref: "amChart.balloon.fadeOutDuration",
-                min: 0,
-                max: 2,
-                step: 0.01,
-                defaultValue: 0,
-            },
-            fixedPosition: {
-                type: "boolean",
-                component: "switch",
-                label: "Fixed position",
-                ref: "amChart.balloon.fixedPosition",
-                options: [{
-                    value: true,
-                    label: "On"
-                },
-                {
-                    value: false,
-                    label: "Off"
-                }],
-                defaultValue: true,
-            },        
-            maxWidth: {
-                type: "number",
-                label: "Max width",
-                ref: "amChart.balloon.maxWidth",
-                defaultValue: 999,
-            },
-            showBullet: {
-                type: "boolean",
-                component: "switch",
-                label: "Show Bullet",
-                ref: "amChart.balloon.showBullet",
-                options: [{
-                    value: true,
-                    label: "On"
-                },
-                {
-                    value: false,
-                    label: "Off"
-                }],
-                defaultValue: false,
-            },
-        }
-    };
-
-    //Appearance    
-    var appearance = {
-        type: "items",
-        label: "Appearance",
-        show: function(data) {
-            return (data.amChart.balloon.enabled != false)
-        },
-        items: {
-            borderAlpha: {
-                type: "number",
-                component: "slider",
-                label: "Border alpha",
-                ref: "amChart.balloon.borderAlpha",
-                min: 0,
-                max: 1,
-                step: 0.01,
-                defaultValue: 1,
-            },
-            borderColor: {
-                type: "string",
-                label: "Border color",
-                ref: "amChart.balloon.borderColor",
-                defaultValue: "#FFFFFF",
-            },
-            borderThickness: {
-                type: "number",
-                label: "Border thickness",
-                ref: "amChart.balloon.borderThickness",
-                defaultValue: 2,
-            },
-            color: {
-                type: "string",
-                label: "Text color",
-                ref: "amChart.balloon.Color",
-                defaultValue: "#000000",
-            },
-            cornerRadius: {
-                type: "number",
-                component: "slider",        
-                label: "Corner radius",
-                ref: "amChart.balloon.cornerRadius",
-                min: 0,
-                max: 30,
-                step: 1,
-                defaultValue: 0,
-            },
-            drop: {
-                type: "boolean",
-                component: "switch",
-                label: "Drop",
+                label: "Balloon Tear Drop Style",
                 ref: "amChart.balloon.drop",
                 options: [{
                     value: true,
@@ -191,45 +37,113 @@ define([], function() {
                     label: "Off"
                 }],
                 defaultValue: false,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false)
+                 },
             },
-            fillAlpha: {
+            balloonTextPick: {
+                type: "string",
+                component: "buttongroup",
+                label: "Balloon Text",
+                ref: "amChart.balloon.textPick",
+                options: [{
+                    value: "d",
+                    label: "Default",
+                    tooltip: "Default Format"
+                }, {
+                    value: ".c.",
+                    label: "Custom",
+                    tooltip: balloonHelp,
+                }],
+                defaultValue: "d",
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false)
+                 },
+             },
+             balloonTextCustom: {
+                type: "string",
+                component: "textarea",
+                label: "Balloon Custom Text",
+                ref: "amChart.balloon.textCustom",
+                defaultValue: "[[title]] ([[percents]]%)",
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false && data.amChart.balloon.textPick =='.c.')
+                },       
+            },
+            BalloonFontSize: {
+                ref: "amChart.balloon.fontSize",
+                label: "Balloon Text Font Size",
+                type: "number",
+                expression: "optional",
+                defaultValue: 11,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false)
+                 },
+            },
+            balloonColorText: {
+                type: "string",
+                label: "Balloon Text Color",
+                ref: "amChart.balloon.balloonColor",
+                expression: "optional",
+                defaultValue: "#000000",
+                show: function(data) {
+                    return (data.amChart.balloon.enabled  != false)
+                },
+            },
+            balloonAnimationDuration: {
                 type: "number",
                 component: "slider",
-                label: "Fill alpha",
-                ref: "amChart.balloon.fillAlpha",
+                label: "Balloon Animation Duration",
+                ref: "amChart.balloon.animationDuration",
                 min: 0,
-                max: 1,
+                max: 2,
                 step: 0.01,
-                defaultValue: 1,
+                defaultValue: 0.3,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false)
+                 },
             },
-            fillColor: {
-                type: "string",
-                label: "Fill color",
-                ref: "amChart.balloon.fillColor",
-                defaultValue: "#FFFFFF",
-            },
-            fontSize: {
-                ref: "amChart.balloon.fontSize",
-                label: "Font Size",
+            balloonFixedPosition: {
+                type: "boolean",
+                component: "switch",
+                label: "Balloon Fixed Position",
+                ref: "amChart.balloon.fixedPosition",
+                options: [{
+                    value: true,
+                    label: "On"
+                },
+                {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: true,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false)
+                 },
+            },        
+            maxWidth: {
                 type: "number",
-                defaultValue: 11,
+                label: "Max width",
+                ref: "amChart.balloon.maxWidth",
+                defaultValue: 999,
             },
-            horizontalPadding: {
-                ref: "amChart.balloon.horizontalPadding",
-                label: "Horizontal padding",
+            balloonCornerRadius: {
                 type: "number",
-                defaultValue: 8,
+                component: "slider",        
+                label: "Balloon Corner Radius",
+                ref: "amChart.balloon.cornerRadius",
+                min: 0,
+                max: 30,
+                step: 0.01,
+                defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false && data.amChart.balloon.drop != true)
+                 },
             },
-            verticalPadding: {
-                ref: "amChart.balloon.verticalPadding",
-                label: "Vertical padding",
-                type: "number",
-                defaultValue: 4,
-            },
-            pointerOrientation: {
+            balloonPointerOrientation: {
                 type: "string",
                 component: "dropdown",
-                label: "Pointer orientation",
+                label: "Balloon Pointer Orientation",
                 ref: "amChart.balloon.pointerOrientation",
                 options: [{
                     value: "down",
@@ -248,39 +162,158 @@ define([], function() {
                     label: "right"
                 }],
                 defaultValue: "down",
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false && data.amChart.balloon.drop == true)
+                 },
             },
-            pointerWidth: {
+            balloonPointerWidth: {
                 ref: "amChart.balloon.pointerWidth",
-                label: "Pointer width",
+                label: "Balloon Pointer Width",
+                component: "slider",        
                 type: "number",
+                min: 0,
+                max: 30,
+                step: 0.01,
                 defaultValue: 8,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false && data.amChart.balloon.cornerRadius == 0)
+                 },
             },
-            shadowAlpha: {
+            balloonHorizontalPadding: {
+                ref: "amChart.balloon.horizontalPadding",
+                label: "Horizontal Text Padding",
+                component: "slider",        
+                type: "number",
+                min: 0,
+                max: 100,
+                step: 0.01,
+                defaultValue: 8,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false)
+                 },
+            },
+            balloonVerticalPadding: {
+                ref: "amChart.balloon.verticalPadding",
+                label: "Vertical Text Padding",
+                component: "slider",        
+                type: "number",
+                min: 0,
+                max: 100,
+                step: 0.01,
+                defaultValue: 4,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false && data.amChart.balloon.drop != true)
+                 },
+            },
+            balloonAdjustBorderColor: {
+                type: "boolean",
+                component: "switch",
+                label: "Adjust Balloon Border Color",
+                ref: "amChart.balloon.adjustBorderColor",
+                options: [{
+                    value: true,
+                    label: "On"
+                },
+                {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: true,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled != false)
+                 },
+             },
+            balloonBorderColorText: {
+                type: "string",
+                label: "Balloon Border Color",
+                ref: "amChart.balloon.borderColor",
+                expression: "optional",
+                defaultValue: "#FFFFFF",
+                show: function(data) {
+                    return (data.amChart.balloon.enabled  != false && data.amChart.balloon.adjustBorderColor != true)
+                },
+            },
+            balloonBorderAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Shadow alpha",
+                label: "Balloon Border Opacity",
+                ref: "amChart.balloon.borderAlpha",
+                min: 0,
+                max: 1,
+                step: 0.01,
+                defaultValue: 1,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled  != false)
+                },
+            },
+            balloonBorderThickness: {
+                type: "number",
+                label: "Balloon Border Thickness",
+                ref: "amChart.balloon.borderThickness",
+                component: "slider",
+                min: 0,
+                max: 20,
+                step: 0.01,
+                defaultValue: 2,
+                show: function(data) {
+                    return (data.amChart.balloon.enabled  != false)
+                },
+            },
+            balloonFllColorText: {
+                type: "string",
+                label: "Balloon Fill Color",
+                ref: "amChart.balloon.fillColor",
+                expression: "optional",
+                defaultValue: "#FFFFFF",
+                show: function(data) { 
+                    return (data.amChart.balloon.enabled  != false && data.amChart.balloon.adjustBorderColor == true)
+                },
+            },
+            balloonFillAlpha: {
+                type: "number",
+                component: "slider",
+                label: "Balloon Fill Opacity",
+                ref: "amChart.balloon.fillAlpha",
+                min: 0,
+                max: 1,
+                step: 0.01,
+                defaultValue: 1,
+                show: function(data) { 
+                    return (data.amChart.balloon.enabled  != false)
+                },
+            },
+            balloonShadowColor: {
+                type: "string",
+                label: "Balloon Shadow color",
+                ref: "amChart.balloon.shadowColor",
+                expression: "optional",
+                defaultValue: "#000000",
+                show: function(data) {
+                    return (data.amChart.balloon.enabled  != false)
+                },
+            },
+            balloonShadowAlpha: {
+                type: "number",
+                component: "slider",
+                label: "Balloon Shadow Opacity",
                 ref: "amChart.balloon.shadowAlpha",
                 min: 0,
                 max: 1,
                 step: 0.01,
                 defaultValue: 0,
-            },
-            shadowColor: {
-                type: "string",
-                label: "Shadow color",
-                ref: "amChart.balloon.shadowColor",
-                defaultValue: "#000000",
+                show: function(data) { 
+                    return (data.amChart.balloon.enabled  != false)
+                },
             },
         }
     };
 
+
     return {
-        component: "expandable-items",
-        label: "Chart Balloon",
+        type: "items",
+        label: "amChart Balloon",
         items: {
-            activate:activate,
             settings:settings,
-            appearance:appearance,
         }
     };
 });

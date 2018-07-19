@@ -14,14 +14,14 @@ define([
             text: {
                 type: "string",
                 label:"Text",
-                label: "text",
                 expression: "optional",
                 ref: "text",
+                defaultValue: "Chart Title"
             },
             alpha: {
                 type: "number",
                 component: "slider",
-                label: "Alpha",
+                label: "Title Opacity",
                 ref: "alpha",
                 min: 0,
                 max: 1,
@@ -31,7 +31,7 @@ define([
             bold:  {
                 type: "boolean",
                 component: "switch",
-                label: "Bold",
+                label: "Title Bold",
                 ref: "bold",
                 options: [{
                     value: true,
@@ -40,18 +40,18 @@ define([
                     value: false,
                     label: "Off"
                 }],
-                defaultValue: false
+                defaultValue: true
             },
             size : {
                 type:"number", 
-                label:"Size", 
+                label:"Title Size", 
                 expression: "optional",
-                defaultValue: 26,
+                defaultValue: 13,
                 ref:"size", 
             },
             color: {
                 type:"string", 
-                label: "Color",
+                label: "Title Color",
                 expression: "optional",
                 ref: "color",
                 defaultValue: "#000000",
@@ -60,7 +60,7 @@ define([
     };
 
     return {
-        label: "Chart Titles",
+        label: "amChart Titles",
         component: "items",
         items: {
             titles:titles,
