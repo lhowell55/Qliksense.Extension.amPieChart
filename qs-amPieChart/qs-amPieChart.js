@@ -112,7 +112,6 @@ function(qlik, $, props,numeral) {
           };
 
           var chart = AmCharts.makeChart(divChart, {
-            "hideCredits": true,
             "type": "pie",
             "theme": layout.amChart.theme,
             "colors":sliceColors,
