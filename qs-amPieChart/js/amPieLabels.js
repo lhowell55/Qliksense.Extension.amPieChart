@@ -2,15 +2,15 @@ define([
 ], function() {
     'use strict';
         
-    //Activate
-    var activate = {
+    //settings
+    var settings = {
         type: "items",
-        label: "Activate",
+        label: "Settings",
         items: {
             labelsEnabled: {
                 type: "boolean",
                 component: "switch",
-                label: "Labels Enabled",
+                label: "Show Labels",
                 ref: "amChart.labelsEnabled",
                 options: [{
                     value: true,
@@ -21,20 +21,9 @@ define([
                 }],
                 defaultValue: true
             },
-        }
-    };
-
-    //Settings
-    var settings = {
-        type: "items",
-        label: "Settings",
-        show: function(data) {
-            return (data.amChart.labelsEnabled != false)
-        },
-        items: {
             labelText: {
                 type: "string",
-                label: "Label text",
+                label: "Label Text",
                 component: "dropdown",
                 ref: "amChart.labelText",
                 defaultValue: "[[title]]: [[percents]]%",
@@ -60,71 +49,103 @@ define([
                         value: "$[[value]]",
                         label: "$[[value]]"
                     }, {
-                        value: "C",
+                        value: ".c.",
                         label: "Custom"
                     },
                 ],  
+                show: function(data) {
+                    return (data.amChart.labelsEnabled != false)
+                },
             },
             labelTextCustom: {
                 type: "string",
-                label: "Label custom text",
+                label: "Label Custom Text",
                 expression: "optional",
                 ref: "amChart.labelTextCustom",
                 defaultValue: "[[title]]",
                 show: function(data) {
-                    return (data.amChart.labelText =='C')
-                }        
-            },
-            labelTickAlpha: {
-                type: "number",
-                label: "Label tick alpha",
-                component: "slider",
-                ref: "amChart.labelTickAlpha",
-                min: 0,
-                max: 1,
-                step: 0.1,
-                defaultValue: 0,
-            },
-            maxLabelWidth: {
-                type: "number",
-                label: "Max label width",
-                ref: "amChart.maxLabelWidth",
-                defaultValue: 200,
-            },
-            labelTickColor: {
-                type: "string",
-                label: "Label tick color",
-                expression: "optional",
-                ref: "amChart.labelTickColor",
-                defaultValue: "#000000",
-            },
-            labelColor: {
-                type: "string",
-                label: "Label color",
-                expression: "optional",
-                ref: "amChart.labelColor",
-                defaultValue: "#000000",
-                show: function(data) {
-                    return (data.amChart.theme =='none')
+                    return (data.amChart.labelsEnabled != false && data.amChart.labelText =='.c.')
                 }        
             },
             labelFontSize: {
                 ref: "amChart.labelFontSize",
-                label: "Font Size",
+                label: "Label Font Size",
                 type: "number",
                 defaultValue: 12,
                 show: function(data) {
-                    return (data.amChart.theme !='chalk')
+                    return (data.amChart.labelsEnabled != false && data.amChart.theme !='chalk')
                 }        
+            },
+            labelColor: {
+                type: "string",
+                label: "Label Color",
+                expression: "optional",
+                ref: "amChart.labelColor",
+                defaultValue: "#000000",
+                show: function(data) {
+                    return (data.amChart.labelsEnabled != false && data.amChart.theme =='none')
+                }        
+            },
+            maxLabelWidth: {
+                type: "number",
+                label: "Label Width",
+                ref: "amChart.maxLabelWidth",
+                component: "slider",                
+                min: 0,
+                max: 300,
+                step: 0.01,
+                defaultValue: 200,
+                show: function(data) {
+                    return (data.amChart.labelsEnabled != false)
+                },
+            },
+            labelRadius: {
+                type: "number",
+                component: "slider",
+                label: "Label Radius",
+                ref: "amChart.labelRadius",
+                min: 0,
+                max: 50,
+                step: 0.01,
+                defaultValue: 0
+            },
+            hideLabelsPercent: {
+                type: "number",
+                label: "Hide Labels Percent",
+                ref: "amChart.hideLabelsPercent",
+                expression: "optional",                
+                defaultValue: 0
+            },
+            labelTickColor: {
+                type: "string",
+                label: "Label Tick Color",
+                expression: "optional",
+                ref: "amChart.labelTickColor",
+                defaultValue: "#000000",
+                show: function(data) {
+                    return (data.amChart.labelsEnabled != false)
+                },
+            },
+            labelTickAlpha: {
+                type: "number",
+                label: "Label Tick Opacity",
+                component: "slider",
+                ref: "amChart.labelTickAlpha",
+                min: 0,
+                max: 1,
+                step: 0.01,
+                defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.labelsEnabled != false)
+                },
             },
         }
     };
 
     return {
-        label: "Chart Labels",
-        component: "expandable-items",
+        label: "amChart Labels",
+        type: "items",
         items: {
-            activate: activate,
             settings,settings,
         }
     };

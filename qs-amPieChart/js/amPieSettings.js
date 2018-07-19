@@ -5,7 +5,7 @@ define([
     //Appearance
     var appearance = {
         type: "items",
-        label: "Appearance",
+        label: "Chart Appearance",
         items: {
             interactionQlik: {
                 type: "boolean",
@@ -42,45 +42,63 @@ define([
                     value: "black",
                     label: "Black"
                 }, {
-                    value: "patterns",
-                    label: "Patterns"
+                    value: "qlik",
+                    label: "Qlik"
                 }],
                 defaultValue: "none"
             },
-            angle: {
-                type: "number",
-                component: "slider",
-                label: "Angle",
-                ref: "amChart.angle",
-                min: 0,
-                max: 100,
-                step: 1,
-                defaultValue: 0
+            useThemeColors: {
+                type: "boolean",
+                component: "switch",
+                label: "Theme Colors for Measures",
+                ref: "amChart.useThemeColors",
+                options: [{
+                    value: true,
+                    label: "On"
+                },
+                {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: true,
+                show: function(data) {
+                    return (data.amChart.theme !='none')
+                },        
             },
             depth3D: {
                 type: "number",
                 component: "slider",
-                label: "Depth3D",
+                label: "Chart 3D",
                 ref: "amChart.depth3D",
                 min: 0,
                 max: 100,
-                step: 1,
+                step: 0.01,
+                defaultValue: 0
+            },
+            angle: {
+                type: "number",
+                component: "slider",
+                label: "Angle Chart",
+                ref: "amChart.angle",
+                min: 0,
+                max: 100,
+                step: 0.01,
                 defaultValue: 0
             },
             innerRadius: {
                 type: "number",
                 component: "slider",
-                label: "Inner radius (donut)",
+                label: "Inner Radius (Donut)",
                 ref: "amChart.innerRadius",
                 min: 0,
                 max: 100,
-                step: 1,
+                step: 0.01,
                 defaultValue: 0
             },
             handDrawn:{
                 type: "boolean",
                 component: "switch",
-                label: "Hand drawn",
+                label: "Hand Drawn Chart",
                 ref: "amChart.handDrawn",
                 options: [{
                     value: true,
@@ -94,95 +112,177 @@ define([
                     return (data.amChart.theme !='chalk')
                 }        
             },
-            labelFontFamily: {
-                ref: "amChart.labelFontFamily",
-                label: "Font Family",
+            handDrawScatter: {
+                type: "number",
+                component: "slider",
+                label: "Hand Drawn Scatter",
+                ref: "amChart.handDrawScatter",
+                min: 0,
+                max: 40,
+                step: 0.01,
+                defaultValue: 2,
+                show: function(data) {
+                    return (data.amChart.handDrawn == true || data.amChart.theme =='chalk')
+                },        
+            },
+            handDrawThickness: {
+                type: "number",
+                component: "slider",
+                label: "Hand Drawn Thickness",
+                ref: "amChart.handDrawThickness",
+                min: 0,
+                max: 30,
+                step: 0.01,
+                defaultValue: 1,
+                show: function(data) {
+                    return (data.amChart.handDrawn == true || data.amChart.theme =='chalk')
+                },        
+            },
+            usePrefix: {
+                type: "boolean",
+                component: "switch",
+                label: "Use Prefix for Numbers",
+                ref: "amChart.usePrefix",
+                options: [{
+                    value: true,
+                    label: "On"
+                },
+                {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: false
+            },
+            FontFamily: {
                 type: "string",
+                component: "dropdown",
+                label: "Global Font Family",
+                ref: "amChart.fontFamily",
+                options: [{
+                        value: "Verdana",
+                        label: "Verdana",
+                    },{
+                        value: "QlikView Sans",
+                        label: "QlikView Sans",
+                    },{
+                        value: "Arial",
+                        label: "Arial"
+                    },{
+                        value: "Tahoma",
+                        label: "Tahoma"
+                    },{
+                        value: "Times New Roman",
+                        label: "Times New Roman"
+                    },{
+                        value: "Cambria",
+                        label: "Cambria"
+                    },{
+                        value: "Calibri",
+                        label: "Calibri"
+                    },{
+                        value: "Lucida Console",
+                        label: "Lucida Console"
+                    },{
+                        value: "Courier New",
+                        label: "Courier New"
+                    }, {
+                        value: ".c.",
+                        label: "Custom"
+                    } ],
+                defaultValue: "Verdana",
+                show: function(data) {
+                    return (data.amChart.handDrawn != true && data.amChart.theme !='chalk')
+                },        
+            },
+            fontFamilyCustom: {
+                type: "string",
+                label: "Global Font Family",
+                ref: "amChart.fontFamilyCustom",
                 expression: "optional",
                 defaultValue: "Verdana",
                 show: function(data) {
-                    return (data.amChart.theme !='chalk')
-                }        
-             },
+                    return (data.amChart.theme !='chalk' && data.amChart.fontFamily == ".c.")
+                },
+            },
             labelRadius: {
                 type: "number",
                 component: "slider",
-                label: "Label radius",
-                ref: "amChart.labelRadius",
+                label: "Chart Radius",
+                ref: "amChart.radius",
                 min: 0,
                 max: 100,
-                step: 1,
-                defaultValue: 0
+                step: 0.01,
+                defaultValue: 30
             },
             startAngle: {
                 type: "number",
                 component: "slider",
-                label: "Start angle",
+                label: "Start Angle",
                 ref: "amChart.startAngle",
                 min: 0,
-                max: 90,
-                step: 1,
-                defaultValue: 0
-            },
-            alpha: {
-                type: "number",
-                component: "slider",
-                label: "Alpha",
-                ref: "amChart.alpha",
-                min: 0,
-                max: 1,
-                step: 0.01,
-                defaultValue: 1
+                max: 360,
+                step: 0.1,
+                defaultValue: 90
             },
             baseColor: {
                 type: "string",
-                label: "Base color",
+                label: "Base Color",
                 expression: "optional",
                 ref: "amChart.baseColor",
                 defaultValue: ""
             },
             colors: {
                 type: "string",
-                label: "Slice color (separated by comma)",
+                label: "Slice Color (separated by comma)",
                 expression: "optional",
                 ref: "amChart.colors",
                 defaultValue: "#FF0F00,#FF6600,#FF9E01,#FCD202,#F8FF01,#B0DE09,#04D215,#0D8ECF,#0D52D1,#2A0CD0,#8A0CCF,#CD0D74,#754DEB,#DDDDDD,#999999,#333333,#000000,#57032A,#CA9726,#990000,#4B0C25"
             },
+            alpha: {
+                type: "number",
+                component: "slider",
+                label: "Slice Opacity",
+                ref: "amChart.alpha",
+                min: 0,
+                max: 1,
+                step: 0.01,
+                defaultValue: 1
+            },
             hoverAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Hover alpha",
+                label: "Hover Opacity",
                 ref: "amChart.hoverAlpha",
                 min: 0,
                 max: 1,
                 step: 0.01,
                 defaultValue: 1
             },
+            outlineColor: {
+                type: "string",
+                label: "Outline Color",
+                expression: "optional",
+                ref: "amChart.outlineColor",
+                defaultValue: "#FFFFFF",
+            },
             outlineAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Outline alpha",
+                label: "Outline Opacity",
                 ref: "amChart.outlineAlpha",
                 min: 0,
                 max: 1,
                 step: 0.01,
                 defaultValue: 0,
             },
-            outlineColor: {
-                type: "string",
-                label: "Outline color",
-                expression: "optional",
-                ref: "amChart.outlineColor",
-                defaultValue: "#FFFFFF",
-            },
             outlineThickness: {
                 type: "number",
                 component: "slider",
-                label: "Outline thickness",
+                label: "Outline Thickness",
                 ref: "amChart.outlineThickness",
                 min: 0,
                 max: 30,
-                step: 1,
+                step: 0.01,
                 defaultValue: 0,
             },
         }
@@ -191,7 +291,7 @@ define([
     //Animation
     var animation = {
         type: "items",
-        label: "Animation",
+        label: "Chart Animation",
         items: {
             chartAnimation: {
                 type: "boolean",
@@ -227,7 +327,7 @@ define([
             startRadius: {
                 type: "number",
                 component: "slider",
-                label: "Start radius",
+                label: "Start Radius",
                 ref: "amChart.startRadius",
                 min: 0,
                 max: 500,
@@ -240,11 +340,11 @@ define([
             startAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Start alpha",
+                label: "Start Opacity",
                 ref: "amChart.startAlpha",
                 min: 0,
-                max: 100,
-                step: 1,
+                max: 1,
+                step: 0.01,
                 defaultValue: 0,
                 show: function(data) {
                     return (data.amChart.chartAnimation != false)
@@ -253,7 +353,7 @@ define([
             startDuration: {
                 type: "number",
                 component: "slider",
-                label: "Start duration",
+                label: "Start Duration",
                 ref: "amChart.startDuration",
                 min: 0,
                 max: 10,
@@ -266,7 +366,7 @@ define([
             startEffect: {
                 type: "string",
                 component: "dropdown",
-                label: "Start effect",
+                label: "Start Effect",
                 ref: "amChart.startEffect",
                 options: [{
                     value: "easeOutSine",
@@ -305,7 +405,7 @@ define([
             pullOutOnlyOne: {
                 type: "boolean",
                 component: "switch",
-                label: "Pullout only once",
+                label: "Pullout Only Once",
                 ref: "amChart.pullOutOnlyOne",
                 options: [{
                     value: true,
@@ -322,7 +422,7 @@ define([
             pullOutRadius: {
                 type: "number",
                 component: "slider",
-                label: "Pull out radius",
+                label: "Pull Out Radius",
                 ref: "amChart.pullOutRadius",
                 min: 0,
                 max: 100,
@@ -335,7 +435,7 @@ define([
             pullOutDuration: {
                 type: "number",
                 component: "slider",
-                label: "Pull out duration",
+                label: "Pull Out Duration",
                 ref: "amChart.pullOutDuration",
                 min: 0,
                 max: 5,
@@ -348,7 +448,7 @@ define([
             pullOutEffect: {
                 type: "string",
                 component: "dropdown",
-                label: "Pull out effect",
+                label: "Pull Out Effect",
                 ref: "amChart.pullOutEffect",
                 options: [{
                     value: "easeOutSine",
