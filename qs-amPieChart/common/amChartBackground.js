@@ -9,7 +9,7 @@ define([
         items: {
             marginBottom: {
                 type: "number",
-                label: "Margin bottom",
+                label: "Margin Bottom",
                 ref: "amChart.marginBottom",
                 component: "slider",
                 min: 0,
@@ -19,7 +19,7 @@ define([
             },
             marginLeft: {
                 type: "number",
-                label: "Margin left",
+                label: "Margin Left",
                 ref: "amChart.marginLeft",
                 component: "slider",
                 min: 0,
@@ -29,7 +29,7 @@ define([
             },
             marginRight: {
                 type: "number",
-                label: "Margin right",
+                label: "Margin Right",
                 ref: "amChart.marginRight",
                 component: "slider",
                 min: 0,
@@ -39,7 +39,7 @@ define([
             },
             marginTop: {
                 type: "number",
-                label: "Margin top",
+                label: "Margin Top",
                 ref: "amChart.marginTop",
                 component: "slider",
                 min: 0,
@@ -55,19 +55,9 @@ define([
         type: "items",
         label: "Chart Background",
         items: {
-            backgroundAlpha: {
-                type: "number",
-                component: "slider",
-                label: "Background alpha",
-                ref: "amChart.backgroundAlpha",
-                min: 0,
-                max: 1,
-                step: 0.01,
-                defaultValue: 0
-            },
             backgroundColor: {
                 type: "string",
-                label: "Background color",
+                label: "Background Color",
                 expression: "optional",
                 ref: "amChart.backgroundColor",
                 defaultValue: "#FFFFFF",
@@ -75,22 +65,35 @@ define([
                     return (data.amChart.theme =='none')
                 }        
             },
+            backgroundAlpha: {
+                type: "number",
+                component: "slider",
+                label: "Background Alpha",
+                ref: "amChart.backgroundAlpha",
+                min: 0,
+                max: 1,
+                step: 0.01,
+                defaultValue: 0,
+                show: function(data) {
+                    return (data.amChart.theme =='none')
+                }        
+            },
+            borderColor: {
+                type: "string",
+                label: "Border Color",
+                expression: "optional",
+                ref: "amChart.borderColor",
+                defaultValue: "#000000"
+            },
             borderAlpha: {
                 type: "number",
                 component: "slider",
-                label: "Border alpha",
+                label: "Border Alpha",
                 ref: "amChart.borderAlpha",
                 min: 0,
                 max: 1,
                 step: 0.01,
                 defaultValue: 0
-            },
-            borderColor: {
-                type: "string",
-                label: "Border color",
-                expression: "optional",
-                ref: "amChart.borderColor",
-                defaultValue: "#000000"
             },
         }
     };
