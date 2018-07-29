@@ -1,5 +1,13 @@
+
 //modeled after Niels Lindberg-Poulsen amChart. 
-//By Les Howell
+/**
+ * @name qs-amPieChart
+ * @author Les Howell
+ * @description charts from amCharts.com
+ * 
+ * @version 1.1.0: Added more Color selections
+ * @version 1.0.0: Initial development
+ */
 
 //Extension folder (change if you rename the extension folder)
 var folder = 'qs-amPieChart';
@@ -51,7 +59,6 @@ function(qlik, $, props,numeral) {
       paint: function ($element, layout) {
           var self = this;
           var hc = layout.qHyperCube;
-          var pieData = new PieDataBuilder(layout.qHyperCube,numeral);
           var sliceColors = [];
           var titles =[];
           var allLabels = [];
@@ -60,8 +67,31 @@ function(qlik, $, props,numeral) {
           var balloon = [];
           var balloonText = "";
           var divChart;
-  
+          var measureData = {
+            ind : (layout.amChart.measureColorsInd == undefined ? 0 : layout.amChart.measureColorsInd),
+            baseColor: (layout.amChart.baseColor == undefined ? "#662506" : layout.amChart.baseColor),
+            baseGradientColor: (layout.amChart.gradientBaseColor == undefined ? "#662506" : layout.amChart.gradientBaseColor),
+            useThemeColors: (layout.amChart.useThemeColors == undefined ? false : layout.amChart.useThemeColors),
+            seqColorSpread: (layout.amChart.seqColorSpread == undefined ? 100 : layout.amChart.seqColorSpread),
+            colorLum: (layout.amChart.colorLum == undefined ? 0.05 : layout.amChart.colorLum),
+            slicedColors:[],
+            range :  {
+              max : 0,
+              min : 0,
+              colors : [],
+              maxRange: [],
+              minRange: []
+            },
+          };
+      
+          if (layout.amChart.theme == undefined || layout.amChart.theme == "none") measureData.useThemeColors = false;
+
+          measureData.slicedColors = layout.amChart.colors ? layout.amChart.colors.split(",") : [];
+
+          var pieData = new PieDataBuilder(layout.qHyperCube,numeral,measureData);
+
           pieData.addData();
+          pieData.doSliceColors(hc,measureData,pieData.dataProvider);
 
           //Set themes
           AmCharts.themes.dark = amChartsThemesDark;
@@ -69,8 +99,6 @@ function(qlik, $, props,numeral) {
           AmCharts.themes.black = amChartsThemesBlack;
           AmCharts.themes.chalk = amChartsThemesChalk;
           AmCharts.themes.qlik = amChartsThemesQlik;          
-
-          sliceColors = layout.amChart.colors ? layout.amChart.colors.split(",") : [];
 
           if(layout.amChart.titles == undefined) layout.amChart.titles = [];
           if(layout.amChart.allLabels == undefined) layout.amChart.allLabels = [];
@@ -114,7 +142,7 @@ function(qlik, $, props,numeral) {
           var chart = AmCharts.makeChart(divChart, {
             "type": "pie",
             "theme": layout.amChart.theme,
-            "colors":sliceColors,
+            "colors":measureData.slicedColors,
             "titleField": "text"+hc.qDimensionInfo[0].cId,
             "valueField": "data"+hc.qMeasureInfo[0].cId,
             "balloonText": balloonText,
@@ -124,7 +152,7 @@ function(qlik, $, props,numeral) {
             "radius":chartData.radius,
             "alpha":chartData.alpha,
             "hideLabelsPercent":chartData.hideLabelsPercent,
-            "baseColor":chartData.baseColor,
+            "baseColor":measureData.baseColor,
             "hoverAlpha":chartData.hoverAlpha,
             "labelsEnabled":chartData.labelsEnabled,
             "labelText": chartData.labelText,

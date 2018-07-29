@@ -1,8 +1,63 @@
-var PieDataBuilder = function(hyperCube,numeral) {
+function ColorLuminance(hex, lum) {
+
+  // validate hex string
+  hex = String(hex).replace(/[^0-9a-f]/gi, '');
+  if (hex.length < 6) {
+    hex = hex[0]+hex[0]+hex[1]+hex[1]+hex[2]+hex[2];
+  }
+  lum = lum || 0;
+  
+  // convert to decimal and change luminosity
+  var rgb = "#", c, i;
+  for (i = 0; i < 3; i++) {
+    c = parseInt(hex.substr(i*2,2), 16);
+    c = Math.round(Math.min(Math.max(0, c + (c * lum)), 255)).toString(16);
+    rgb += ("00"+c).substr(c.length);
+  }
+
+  return rgb;
+};
+
+function getColorRange(measureData) {
+  var	color = measureData.baseGradientColor;
+  lum = measureData.colorLum;
+
+  var i, nc;
+  var cs = measureData.seqColorSpread;
+  var range = (measureData.range.max - measureData.range.min) / measureData.seqColorSpread;
+  var max = measureData.range.max;
+  
+  for (var i = 0; i < cs; i++) {
+    nc = ColorLuminance(color, i*lum),
+    measureData.range.colors[i] = nc,
+    measureData.range.maxRange[i] = max,max = max - range;
+    measureData.range.minRange[i] = max
+  };
+};
+
+function getColor(measureData,num) {
+  var i = 0;
+  var j = measureData.seqColorSpread-1;
+  var loop = true;
+  var color = measureData.range.colors[0];
+  
+  while (loop && i<j){
+    if (measureData.range.maxRange[i]>=num && measureData.range.minRange[i]<=num){
+      loop = false;
+      color = measureData.range.colors[i];
+    };
+    i++
+  };
+
+  return color;
+};
+
+var PieDataBuilder = function(hyperCube,numeral,measureData) {
   var self = this;
   self.hyperCube = hyperCube;
   self.dataProvider = [];
   self.numeral = numeral;
+  self.measureData = measureData;
 };
 
 PieDataBuilder.prototype.addData = function() {
@@ -79,14 +134,21 @@ var PieDataPoint = function(hyperCube, rindex, cell, cindex, cellId,numeral) {
 
 PieDataPoint.prototype.addPointData = function() {
   var self = this;
-
-  self.values['text' + self.cellId] = self.cell.qText;
+  
+  if (self.cell.qState != 'L') {
+    self.values['text' + self.cellId] = self.cell.qText;
+  }
 
   if (self.cell.qState == 'L'){
-    var qFormat = self.hyperCube.qMeasureInfo[0].qNumFormat.qFmt
-    // if (self.cell.qNum != 'NaN') console.log(self.numeral(self.cell.qNum).format(qFormat));
-    self.values['data' + self.cellId] = (self.cell.qNum == 'NaN' ? 0 : self.numeral(self.numeral(self.cell.qNum).format(qFormat)))._value;
-    self.values['format' + self.cellId] = qFormat;
+    if (self.cell.qIsOtherCell != undefined && self.cell.qIsOtherCell == true){
+        self.values['text' + self.cellId] = self.hyperCube.qDimensionInfo[self.cindex].othersLabel;
+        self.values['others'] = true;
+    }else{
+      var qFormat = self.hyperCube.qMeasureInfo[0].qNumFormat.qFmt
+      self.values['data' + self.cellId] = (self.cell.qNum == 'NaN' ? 0 : self.numeral(self.numeral(self.cell.qNum).format(qFormat)))._value;
+      self.values['data'] =  self.values['data' + self.cellId];
+      self.values['format' + self.cellId] = qFormat;
+    }
   } 
 };
 
@@ -281,10 +343,6 @@ PieDataBuilder.prototype.addChartData = function(chart,amChart) {
     self.outlineColor = amChart.outlineColor;
   } else self.outlineColor = "#FFFFFF";
 
-  if (amChart.baseColor != '') {
-    self.baseColor = amChart.baseColor;
-  } else self.baseColor = "";
-
   if (amChart.labelColor != '') {
     self.color = amChart.labelColor;
   } else self.color = "#000000";
@@ -313,8 +371,7 @@ PieDataBuilder.prototype.addChartData = function(chart,amChart) {
 PieDataBuilder.prototype.doChartTheme = function(chart,amChart) {
   var self = chart;
   var i;
-  var empty;
-
+  
   //Handel THEMES
   if(amChart.theme != "none") {
     self.color = self.theme.AmChart.color;
@@ -364,5 +421,36 @@ PieDataBuilder.prototype.doChartTheme = function(chart,amChart) {
     };
   };
 };
+
+PieDataBuilder.prototype.doSliceColors = function(hyperCube,measureData,dataProvider) {
+  var i=0,k=0;
+
+  if (measureData.useThemeColors != true) {
+    if (measureData.ind == 0) {
+      measureData.baseColor = "";
+    }else{
+      if (measureData.ind >=2) {
+        measureData.range.max = Math.round(hyperCube.qMeasureInfo[0].qMax);
+        measureData.range.min = Math.round(hyperCube.qMeasureInfo[0].qMin);
+        measureData.baseColor = "";
+        getColorRange(measureData);
+
+        for (i = 0; i < dataProvider.length; i++) { 
+          if (measureData.ind == 3) {
+              measureData.slicedColors[i] =  measureData.range.colors[k];
+              k++;
+
+              if (k>measureData.range.colors.length) k=0;
+          }
+
+          if (measureData.ind ==  2){
+            measureData.slicedColors[i] = getColor(measureData,Math.round(dataProvider[i].data));
+          }
+        }
+      }
+    }
+  } else measureData.baseColor = "";
+};
+
 
 
