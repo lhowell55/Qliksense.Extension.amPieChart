@@ -146,7 +146,7 @@ define([
         label: "amChart Labels",
         type: "items",
         items: {
-            settings,settings,
+            settings:settings,
         }
     };
 });

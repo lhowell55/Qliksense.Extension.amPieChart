@@ -21,50 +21,6 @@ define([
                 }],
                 defaultValue: false
             },
-            theme: {
-                type: "string",
-                component: "dropdown",
-                label: "Theme",
-                ref: "amChart.theme",
-                options: [{
-                    value: "none",
-                    label: "None"
-                }, {
-                    value: "light",
-                    label: "Light"
-                }, {
-                    value: "dark",
-                    label: "Dark"
-                }, {
-                    value: "chalk",
-                    label: "Chalk"
-                }, {
-                    value: "black",
-                    label: "Black"
-                }, {
-                    value: "qlik",
-                    label: "Qlik"
-                }],
-                defaultValue: "none"
-            },
-            useThemeColors: {
-                type: "boolean",
-                component: "switch",
-                label: "Theme Colors for Measures",
-                ref: "amChart.useThemeColors",
-                options: [{
-                    value: true,
-                    label: "On"
-                },
-                {
-                    value: false,
-                    label: "Off"
-                }],
-                defaultValue: true,
-                show: function(data) {
-                    return (data.amChart.theme !='none')
-                },        
-            },
             depth3D: {
                 type: "number",
                 component: "slider",
@@ -224,20 +180,6 @@ define([
                 step: 0.1,
                 defaultValue: 90
             },
-            baseColor: {
-                type: "string",
-                label: "Base Color",
-                expression: "optional",
-                ref: "amChart.baseColor",
-                defaultValue: ""
-            },
-            colors: {
-                type: "string",
-                label: "Slice Color (separated by comma)",
-                expression: "optional",
-                ref: "amChart.colors",
-                defaultValue: "#FF0F00,#FF6600,#FF9E01,#FCD202,#F8FF01,#B0DE09,#04D215,#0D8ECF,#0D52D1,#2A0CD0,#8A0CCF,#CD0D74,#754DEB,#DDDDDD,#999999,#333333,#000000,#57032A,#CA9726,#990000,#4B0C25"
-            },
             alpha: {
                 type: "number",
                 component: "slider",
@@ -284,6 +226,134 @@ define([
                 max: 30,
                 step: 0.01,
                 defaultValue: 0,
+            },
+        }
+    };
+
+
+    //Themes and colors
+    var colors = {
+        type: "items",
+        label: "Chart Themes & Colors",
+        items: {
+            theme: {
+                type: "string",
+                component: "dropdown",
+                label: "Theme",
+                ref: "amChart.theme",
+                options: [{
+                    value: "none",
+                    label: "None"
+                }, {
+                    value: "light",
+                    label: "Light"
+                }, {
+                    value: "dark",
+                    label: "Dark"
+                }, {
+                    value: "chalk",
+                    label: "Chalk"
+                }, {
+                    value: "black",
+                    label: "Black"
+                }, {
+                    value: "qlik",
+                    label: "Qlik"
+                }],
+            defaultValue: "none",
+            },
+            useThemeColors: {
+                type: "boolean",
+                component: "switch",
+                label: "Theme Colors for Measures",
+                ref: "amChart.useThemeColors",
+                options: [{
+                    value: true,
+                    label: "On"
+                },
+                {
+                    value: false,
+                    label: "Off"
+                }],
+                defaultValue: true,
+                show: function(data) {
+                    return (data.amChart.theme !='none')
+                },        
+            },
+            useDifferentColors: {
+                type: "string",
+                component: "dropdown",
+                label: "Slice Colors",
+                ref: "amChart.measureColorsInd",
+                options: [{
+                    value: 0,
+                    label: "Input Colors for Measures"
+                    }, {
+                    value: 1,
+                    label: "Input Base Color for Measure"
+                    }, {
+                    value: 2,
+                    label: "Sequencial Gradient by Measure"
+                }, {
+                    value: 3,
+                    label: "Sequencial Gradient by Range"
+                }],
+            defaultValue: 0,
+            show: function(data) {
+                    return (data.amChart.theme =='none' || data.amChart.useThemeColors != true)
+                },        
+            },
+            singleBaseColor: {
+                type: "string",
+                label: "Slice Base Color",
+                expression: "optional",
+                ref: "amChart.baseColor",
+                defaultValue: "#662506",
+                show: function(data) {
+                    return ((data.amChart.theme =='none' || data.amChart.useThemeColors == false) && data.amChart.measureColorsInd == 1)
+                },        
+            },
+            colors: {
+                type: "string",
+                label: "Slice Color (separated by comma)",
+                expression: "optional",
+                ref: "amChart.colors",
+                defaultValue: "#FF0F00,#FF6600,#FF9E01,#FCD202,#F8FF01,#B0DE09,#04D215,#0D8ECF,#0D52D1,#2A0CD0,#8A0CCF,#CD0D74,#754DEB,#DDDDDD,#999999,#333333,#000000,#57032A,#CA9726,#990000,#4B0C25",
+                show: function(data) {
+                    return ((data.amChart.theme =='none' || data.amChart.useThemeColors == false) && data.amChart.measureColorsInd == 0)                },        
+            },
+            gradientBaseColor: {
+                type: "string",
+                label: "Base Color for Sequential Gradient",
+                expression: "optional",
+                ref: "amChart.gradientBaseColor",
+                defaultValue: "#662506",
+                show: function(data) {
+                    return ((data.amChart.theme =='none' || data.amChart.useThemeColors == false) && data.amChart.measureColorsInd >= 2)
+                },        
+            },
+            seqColorSpread: {
+                type: "number",
+                label: "Sequence Color Spread",
+                expression: "optional",
+                ref: "amChart.seqColorSpread",
+                defaultValue: 100,
+                show: function(data) {
+                    return ((data.amChart.theme =='none' || data.amChart.useThemeColors == false) && data.amChart.measureColorsInd >= 2)
+                },        
+            },
+            lumRange: {
+                type: "number",
+                label: "Color Luminance",
+                ref: "amChart.colorLum",
+                component: "slider",
+                min: 0,
+                max: 0.1,
+                step: 0.01,
+                defaultValue: 0.05,
+                show: function(data) {
+                    return ((data.amChart.theme =='none' || data.amChart.useThemeColors == false) && data.amChart.measureColorsInd >= 2)
+                },        
             },
         }
     };
@@ -478,6 +548,7 @@ define([
         component: "expandable-items",
         items: {
             appearance: appearance,
+            colors:colors,
             animation:animation,
         }
     };
